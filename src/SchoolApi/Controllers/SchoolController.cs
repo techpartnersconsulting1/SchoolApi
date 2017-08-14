@@ -396,6 +396,40 @@ namespace School.Api.School.Controllers
 
         }
 
+        // GET api/values
+        [HttpGet]
+        [Route("ActiveTypes")]
+        public IActionResult ActiveTypes()
+        {
+
+
+            ObjectResult result = null;
+            try
+            {
+                Response<ActiveTypesDtoList> resp = new Response<ActiveTypesDtoList>();
+                ActiveTypesDtoList list = new ActiveTypesDtoList();
+                list.ActiveTypes.Add(new ActiveTypesDto { Name = "Active", Id = "Active" });
+                list.ActiveTypes.Add(new ActiveTypesDto { Name = "InActive", Id = "InActive" });
+
+                resp.SetDto(list);
+                resp.Message = "Data retrieved.";
+                result = new OkObjectResult(resp);
+            }
+            catch (Exception ex)
+            {
+                ErrorResponse errResp = new ErrorResponse();
+                ExceptionDetails errDt = new ExceptionDetails();
+                errDt.Message = ex.StackTrace;
+
+                errResp.SetException(errDt);
+                result = StatusCode(500, errResp);
+
+            }
+
+            return result;
+
+        }
+
 
 
 
