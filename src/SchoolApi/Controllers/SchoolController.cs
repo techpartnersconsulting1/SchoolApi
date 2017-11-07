@@ -229,8 +229,8 @@ namespace School.Api.School.Controllers
 
         // GET api/values
         [HttpGet]
-        [Route("Grades/{gradeId}/Classes")]
-        public IActionResult Search(string  gradeId)
+        [Route("{schoolId}/Grades/{gradeId}/Classes")]
+        public IActionResult Search(string schoolId,string  gradeId)
         {
            
             
@@ -262,12 +262,51 @@ namespace School.Api.School.Controllers
             return result;
 
         }
-        
+
+
+
+        // GET api/values
+        [HttpGet]
+        [Route("{schoolId}/Classes")]
+        public IActionResult SearchClassBySchoolId(string schoolId)
+        {
+
+
+            ObjectResult result = null;
+            try
+            {
+                Response<ClasssDtoList> resp = new Response<ClasssDtoList>();
+
+                ClasssDtoList list = new Model.ClasssDtoList();
+                list.Classes.Add(new ClassDto { Id = "10", Name = "Mrs Amoia" });
+                list.Classes.Add(new ClassDto { Id = "12", Name = "Ms Thoten" });
+                list.Classes.Add(new ClassDto { Id = "13", Name = "Ms McKenzie" });
+                list.Classes.Add(new ClassDto { Id = "14", Name = "Mr Battaaeo" });
+                list.Classes.Add(new ClassDto { Id = "25", Name = "Mrs Stemmler" });
+                resp.SetDto(list);
+                resp.Message = "Data retrieved";
+
+                result = new OkObjectResult(resp);
+            }
+            catch (Exception ex)
+            {
+                ErrorResponse errResp = new ErrorResponse();
+                ExceptionDetails errDt = new ExceptionDetails();
+                errDt.Message = ex.StackTrace;
+                errResp.SetException(errDt);
+                result = StatusCode(500, errResp);
+
+            }
+            return result;
+
+        }
+
+
 
         // GET api/values
         [HttpPost]
-        [Route("Grade/{gradeId}/Class")]
-        public IActionResult SaveClass([FromBody] ClassSaveRequest request,string gradeId )
+        [Route("{schoolId}/Grade/{gradeId}/Class")]
+        public IActionResult SaveClass([FromBody] ClassSaveRequest request, string schoolId, string gradeId )
         {
 
 

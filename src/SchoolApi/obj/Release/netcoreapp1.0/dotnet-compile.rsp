@@ -180,6 +180,8 @@
 C:\MyProjects\School\Api\SchoolApi\src\SchoolApi\Program.cs
 C:\MyProjects\School\Api\SchoolApi\src\SchoolApi\Startup.cs
 C:\MyProjects\School\Api\SchoolApi\src\SchoolApi\Controllers\SchoolController.cs
+C:\MyProjects\School\Api\SchoolApi\src\SchoolApi\Data\IRepository.cs
+C:\MyProjects\School\Api\SchoolApi\src\SchoolApi\Model\ActiveTypeDto.cs
 C:\MyProjects\School\Api\SchoolApi\src\SchoolApi\Model\Class.cs
 C:\MyProjects\School\Api\SchoolApi\src\SchoolApi\Model\ExceptionDetails.cs
 C:\MyProjects\School\Api\SchoolApi\src\SchoolApi\Model\Response.cs
