@@ -128,14 +128,14 @@ namespace School.Api.School.Controllers
             {
                 Response<SchoolDto> resp = new Response<SchoolDto>();
                 SchoolDto sch = new Model.SchoolDto();
-                sch.Address = req.School.Address;
-                sch.City = req.School.City;
-                sch.ID = "2501";
-                sch.IsActive = req.School.IsActive;
-                sch.Name = req.School.Name;
-                sch.SchoolDistrictId = req.School.SchoolDistrictId;
-                sch.State = req.School.State;
-                sch.GradeIds = req.School.GradeIds;
+                sch.address = req.School.address;
+                sch.city = req.School.city;
+                sch.id = "2501";
+                sch.isActive = req.School.isActive;
+                sch.name = req.School.name;
+                sch.schoolDistrictId = req.School.schoolDistrictId;
+                sch.state = req.School.state;
+                sch.gradeIds = req.School.gradeIds;
 
                 resp.SetDto(sch);
                 resp.Message = "Data retrieved.";
