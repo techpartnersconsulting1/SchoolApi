@@ -161,20 +161,11 @@ namespace School.Api.School.Controllers
         [Route("Grades")]
         public IActionResult Grades( )
         {
-
             ObjectResult result = null;
             try
             {
                 Response<GradeDtoList> resp = new Response<GradeDtoList>();
-                GradeDtoList list = new Model.GradeDtoList();
-                list.Grades.Add(new GradeDto { Id = "1", Name = "Pre-K" });
-                list.Grades.Add(new GradeDto { Id = "2", Name = "KG" });
-                list.Grades.Add(new GradeDto { Id = "3", Name = "First" });
-                list.Grades.Add(new GradeDto { Id = "4", Name = "Second" });
-                list.Grades.Add(new GradeDto { Id = "5", Name = "Third" });
-                list.Grades.Add(new GradeDto { Id = "6", Name = "Forth" });
-                list.Grades.Add(new GradeDto { Id = "7", Name = "Fifth" });
-                list.Grades.Add(new GradeDto { Id = "8", Name = "Sixth" });
+                var list = Repository.GetGrades();
                 resp.SetDto(list);
                 resp.Message = "Data retrieved.";
                 result = new OkObjectResult(resp);
@@ -189,7 +180,6 @@ namespace School.Api.School.Controllers
 
             }
             return result;
-
         }
 
 

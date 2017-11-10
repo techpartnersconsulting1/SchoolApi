@@ -62,7 +62,7 @@ namespace School.Api.School.Data
             throw new NotImplementedException();
         }
 
-        public GradeDtoList GetGrades(string schoolId)
+        public GradeDtoList GetGrades()
         {
             var result = new GradeDtoList();
             string queryString = "[dbo].[sp_AdmMasterGrade]";
@@ -74,12 +74,11 @@ namespace School.Api.School.Data
                     {
                         connection.Open();
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new SqlParameter { ParameterName = "@SchoolID", DbType = DbType.Int32, Value = Convert.ToInt32(schoolId) });
                         var dr = command.ExecuteReader();
                         while (dr.Read())
                         {
                             var newGrade = new GradeDto();
-                            //newGrade.Id = dr["GradeSchoolID"].ToString();
+                            newGrade.SchoolId = dr["SchoolID"].ToString();
                             newGrade.Id = dr["GradeID"].ToString();
                             newGrade.Name = dr["GradeName"].ToString();
                             result.Grades.Add(newGrade);
@@ -111,7 +110,7 @@ namespace School.Api.School.Data
                         while (dr.Read())
                         {
                             var newGrade = new GradeDto();
-                            //newGrade.Id = dr["GradeSchoolID"].ToString();
+                            newGrade.SchoolId = dr["GradeSchoolID"].ToString();
                             newGrade.Id = dr["GradeID"].ToString();
                             newGrade.Name = dr["GradeName"].ToString();
                             result.Grades.Add(newGrade);
