@@ -16,7 +16,7 @@ namespace School.Api.School.Data
        // void Update(ClsRoom item);
         SchoolDto GetSchoolByState(SearchSchoolDistrictDto state);
         SearchSchoolDistrictDto GetSchoolDistrictByState(SearchSchoolDistrictDto state);
-        GradeDtoList GetGrades(string schoolId);
+        GradeDtoList GetGrades();
         GradeDtoList GetSchoolGrades(string schoolId);
         ClasssDtoList GetClassesBySchool(string schoolId);
         ClasssDtoList GetClassesByGrade(string schoolGradeId);
