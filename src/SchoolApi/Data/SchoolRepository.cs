@@ -57,9 +57,34 @@ namespace School.Api.School.Data
             return null;
         }
 
-        public SearchSchoolDistrictDto GetSchoolDistrictByState(SearchSchoolDistrictDto state)
+        public SchoolDistrictListDto GetSchoolDistrictByState(SearchSchoolDistrictDto state)
         {
-            throw new NotImplementedException();
+            var result = new SchoolDistrictListDto();
+            string queryString = "[dbo].[sp_AdmSchoolDistrictByState]";
+            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    try
+                    {
+                        connection.Open();
+                        command.CommandType = CommandType.StoredProcedure;
+                        var dr = command.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            var districtDto = new SchoolDistrictDto();
+                            districtDto.SchoolDistrictId = dr["SchoolDistrictID"].ToString();
+                            districtDto.SchoolDistrictName = dr["SchoolDistrictName"].ToString();
+                            result.SchoolDistricts.Add(districtDto);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
+                }
+            }
+            return result;
         }
 
         public GradeDtoList GetGrades()
@@ -220,9 +245,9 @@ namespace School.Api.School.Data
             return result;
         }
 
-        public StateList GetStates()
+        public StateListDto GetStates()
         {
-            var result = new StateList
+            var result = new StateListDto
             {
                 States = new List<StateDto>()
                 {

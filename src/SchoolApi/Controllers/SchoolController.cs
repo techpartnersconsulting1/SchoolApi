@@ -58,14 +58,11 @@ namespace School.Api.School.Controllers
         [Route("SearchSchoolDistrict")]
         public IActionResult SearchSchoolDistrict([FromBody]SearchSchoolDistrictRequest dto)
         {
-
             ObjectResult result = null;
             try
             {
-                Response<SchoolDistrictAsOneStringList> resp = new Response<SchoolDistrictAsOneStringList>();
-                SchoolDistrictAsOneStringList list = new SchoolDistrictAsOneStringList();
-                list.SchoolDistricts.Add(new SchoolDistrictAsOneString { ID = "101", DataString = "South Brunswick School district,12 Kory Lane, South Brunswick,NJ,08824" });
-                list.SchoolDistricts.Add(new SchoolDistrictAsOneString { ID = "102", DataString = "Franklin Park  School District,234 Stouts Lane, Somerset Park,NJ,08826" });
+                Response<SchoolDistrictListDto> resp = new Response<SchoolDistrictListDto>();
+                var list = Repository.GetSchoolDistrictByState(dto.Request);
                 resp.SetDto(list);
                 resp.Message = "Data retrieved.";
                 result = new OkObjectResult(resp);
@@ -80,7 +77,6 @@ namespace School.Api.School.Controllers
 
             }
             return result;
-
         }
 
 
@@ -371,7 +367,7 @@ namespace School.Api.School.Controllers
             ObjectResult result = null;
             try
             {
-                Response<StateList> resp = new Response<StateList>();
+                Response<StateListDto> resp = new Response<StateListDto>();
                 var list = Repository.GetStates();
                 resp.SetDto(list);
                 resp.Message = "Data retrieved.";

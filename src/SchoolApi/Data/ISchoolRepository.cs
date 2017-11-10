@@ -15,12 +15,12 @@ namespace School.Api.School.Data
         //void Remove(ClsRoom item);
        // void Update(ClsRoom item);
         SchoolDto GetSchoolByState(SearchSchoolDistrictDto state);
-        SearchSchoolDistrictDto GetSchoolDistrictByState(SearchSchoolDistrictDto state);
+        SchoolDistrictListDto GetSchoolDistrictByState(SearchSchoolDistrictDto state);
         GradeDtoList GetGrades();
         GradeDtoList GetSchoolGrades(string schoolId);
         ClasssDtoList GetClassesBySchool(string schoolId);
         ClasssDtoList GetClassesByGrade(string schoolGradeId);
-        StateList GetStates();
+        StateListDto GetStates();
         SchoolDto GetSchool(string schoolId);
         TeacherListDto GetTeachersInSchool(string schoolId);
     }
