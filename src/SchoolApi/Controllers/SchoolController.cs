@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using School.Api.School.Data;
 using School.Api.School.Model;
 
 namespace School.Api.School.Controllers
@@ -11,8 +13,16 @@ namespace School.Api.School.Controllers
     [Produces("application/json")]
     public class SchoolsController : Controller
     {
-  
-        
+        private ISchoolRepository Repository
+        {
+            get;
+        }
+
+        public SchoolsController(ISchoolRepository repository)
+        {
+            this.Repository = repository;
+        }
+
         [HttpPost]
         [Route("SearchSchool")]
         public IActionResult SearchSchools([FromBody]SearchSchoolRequest dto)
@@ -44,7 +54,6 @@ namespace School.Api.School.Controllers
     
 
 
-        // GET api/values
         [HttpPost]
         [Route("SearchSchoolDistrict")]
         public IActionResult SearchSchoolDistrict([FromBody]SearchSchoolDistrictRequest dto)
@@ -84,19 +93,18 @@ namespace School.Api.School.Controllers
             try
             {
                 Response<SchoolDto> resp = new Response<SchoolDto>();
-                SchoolDto  sch = new Model.SchoolDto();
-                sch.Address = "5, Kory Drive";
-                sch.City = "Kendall Park";
-                sch.ID = "2501";
-                sch.IsActive = "Active";
-                sch.Name = "BrunswickAcres school";
-                sch.SchoolDistrictId = "1001";
-                sch.State = "NJ";
-                sch.GradeIds = new List<string> { "1", "2", "3", "4", "5", "6" };
-             
-                resp.SetDto(sch);
-                resp.Message = "Data retrieved.";
-                result = new OkObjectResult(resp);
+                var schoolDto = Repository.GetSchool(schoolId);
+                resp.SetDto(schoolDto);
+                if (schoolDto != null)
+                {
+                    resp.Message = "Data retrieved.";
+                    result = new OkObjectResult(resp);
+                }
+                else
+                {
+                    result = new BadRequestObjectResult(resp);
+                }
+                
             }
             catch (Exception ex)
             {
@@ -105,7 +113,6 @@ namespace School.Api.School.Controllers
                 errDt.Message = ex.StackTrace;
                 errResp.SetException(errDt);
                 result = StatusCode(500, errResp);
-
             }
             return result;
 
@@ -196,15 +203,7 @@ namespace School.Api.School.Controllers
             try
             {
                 Response<GradeDtoList> resp = new Response<GradeDtoList>();
-                GradeDtoList list = new Model.GradeDtoList();
-                list.Grades.Add(new GradeDto { Id = "1", Name = "Pre-K" });
-                list.Grades.Add(new GradeDto { Id = "2", Name = "KG" });
-                list.Grades.Add(new GradeDto { Id = "3", Name = "First" });
-                list.Grades.Add(new GradeDto { Id = "4", Name = "Second" });
-                list.Grades.Add(new GradeDto { Id = "5", Name = "Third" });
-                list.Grades.Add(new GradeDto { Id = "6", Name = "Forth" });
-                list.Grades.Add(new GradeDto { Id = "7", Name = "Fifth" });
-                list.Grades.Add(new GradeDto { Id = "8", Name = "Sixth" });
+                var list = Repository.GetSchoolGrades(schoolId);
                 resp.SetDto(list);
                 resp.Message = "Data retrieved.";
                 result = new OkObjectResult(resp);
@@ -216,10 +215,8 @@ namespace School.Api.School.Controllers
                 errDt.Message = ex.StackTrace;
                 errResp.SetException(errDt);
                 result = StatusCode(500, errResp);
-
             }
             return result;
-
         }
 
 
@@ -227,24 +224,16 @@ namespace School.Api.School.Controllers
 
        
 
-        // GET api/values
         [HttpGet]
         [Route("{schoolId}/Grades/{gradeId}/Classes")]
         public IActionResult Search(string schoolId,string  gradeId)
         {
-           
-            
             ObjectResult result = null;
             try
             {
                 Response<ClasssDtoList> resp = new Response<ClasssDtoList>();
-
-                ClasssDtoList list = new Model.ClasssDtoList();
-                list.Classes.Add(new ClassDto { Id = "10", Name = "Mrs Amoia" });
-                list.Classes.Add(new ClassDto { Id = "12", Name = "Ms Thoten" });
-                list.Classes.Add(new ClassDto { Id = "13", Name = "Ms McKenzie" });
-                list.Classes.Add(new ClassDto { Id = "14", Name = "Mr Battaaeo" });
-                list.Classes.Add(new ClassDto { Id = "25", Name = "Mrs Stemmler" });
+                // TODO: IMPORTANT!!! How to convert "schoolId" + "gradeId" into @SchoolGradeID
+                var list = Repository.GetClassesByGrade(gradeId);
                 resp.SetDto(list);
                 resp.Message = "Data retrieved";
 
@@ -260,12 +249,10 @@ namespace School.Api.School.Controllers
 
             }
             return result;
-
         }
 
 
 
-        // GET api/values
         [HttpGet]
         [Route("{schoolId}/Classes")]
         public IActionResult SearchClassBySchoolId(string schoolId)
@@ -276,16 +263,9 @@ namespace School.Api.School.Controllers
             try
             {
                 Response<ClasssDtoList> resp = new Response<ClasssDtoList>();
-
-                ClasssDtoList list = new Model.ClasssDtoList();
-                list.Classes.Add(new ClassDto { Id = "10", Name = "Mrs Amoia" });
-                list.Classes.Add(new ClassDto { Id = "12", Name = "Ms Thoten" });
-                list.Classes.Add(new ClassDto { Id = "13", Name = "Ms McKenzie" });
-                list.Classes.Add(new ClassDto { Id = "14", Name = "Mr Battaaeo" });
-                list.Classes.Add(new ClassDto { Id = "25", Name = "Mrs Stemmler" });
+                var list = Repository.GetClassesBySchool(schoolId);
                 resp.SetDto(list);
                 resp.Message = "Data retrieved";
-
                 result = new OkObjectResult(resp);
             }
             catch (Exception ex)
@@ -303,13 +283,10 @@ namespace School.Api.School.Controllers
 
 
 
-        // GET api/values
         [HttpPost]
         [Route("{schoolId}/Grade/{gradeId}/Class")]
         public IActionResult SaveClass([FromBody] ClassSaveRequest request, string schoolId, string gradeId )
         {
-
-
             ObjectResult result = null;
             try
             {
@@ -335,21 +312,16 @@ namespace School.Api.School.Controllers
         }
        
 
-        // GET api/values
         [HttpGet]
         [Route("{schoolId}/Teachers")]
-        public IActionResult GetTeachersInSchool( string schoolId)
+        public IActionResult GetTeachersInSchool(string schoolId)
         {
             
             ObjectResult result = null;
             try
             {
                 Response<TeacherListDto> resp  = new Response<TeacherListDto>();
-                TeacherListDto list = new Model.TeacherListDto();
-                list.Teachers.Add(new TeacherDto { Id = "1009", Name = "Mrs Amoia" });
-                list.Teachers.Add(new TeacherDto {Id = "1001",Name = "Mrs Stemmler"});
-                list.Teachers.Add(new TeacherDto { Id = "1002", Name = "Mrs Smart" });
-                list.Teachers.Add(new TeacherDto { Id = "1003", Name = "Mr Edwards" });
+                var list = Repository.GetTeachersInSchool(schoolId);
                 resp.Message = "Data retrieved";
                 resp.SetDto(list);
                 result = new OkObjectResult(resp);
@@ -406,18 +378,11 @@ namespace School.Api.School.Controllers
         [Route("States")]
         public IActionResult States()
         {
-
             ObjectResult result = null;
             try
             {
                 Response<StateList> resp = new Response<StateList>();
-                StateList list = new Model.StateList();
-                list.States.Add(new StateDto {StateCd  = "NJ", StateName = "New Jersey" });
-                list.States.Add(new StateDto { StateCd = "PA", StateName = "Pennsylvania" });
-                list.States.Add(new StateDto { StateCd = "CT", StateName = "Connecticut" });
-                list.States.Add(new StateDto { StateCd = "MA", StateName = "Massachuesettes" });
-                list.States.Add(new StateDto { StateCd = "CA", StateName = "California" });
-
+                var list = Repository.GetStates();
                 resp.SetDto(list);
                 resp.Message = "Data retrieved.";
                 result = new OkObjectResult(resp);
@@ -429,19 +394,15 @@ namespace School.Api.School.Controllers
                 errDt.Message = ex.StackTrace;
                 errResp.SetException(errDt);
                 result = StatusCode(500, errResp);
-
             }
             return result;
 
         }
 
-        // GET api/values
         [HttpGet]
         [Route("ActiveTypes")]
         public IActionResult ActiveTypes()
         {
-
-
             ObjectResult result = null;
             try
             {
@@ -459,21 +420,12 @@ namespace School.Api.School.Controllers
                 ErrorResponse errResp = new ErrorResponse();
                 ExceptionDetails errDt = new ExceptionDetails();
                 errDt.Message = ex.StackTrace;
-
                 errResp.SetException(errDt);
                 result = StatusCode(500, errResp);
-
             }
 
             return result;
-
         }
-
-
-
-
-
-
 
 
     }

@@ -7,22 +7,27 @@ namespace School.Api.School.Model
 {
     public class SchoolDto
     {
-        public string ID { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
+        public string id { get; set; } = string.Empty;
+        public string name { get; set; } = string.Empty;
 
-        public string City { get; set; } = string.Empty;
+        public string city { get; set; } = string.Empty;
 
-        public string Address { get; set; } = string.Empty;
+        public string address { get; set; } = string.Empty;
 
-        public string State  { get; set; } = string.Empty;
+        public string state  { get; set; } = string.Empty;
 
-        public string SchoolDistrictId { get; set; } = string.Empty;
+        public string schoolDistrictId { get; set; } = string.Empty;
 
-        public List<string> GradeIds = new  List<string>();
+        public List<Grade> gradeIds = new  List<Grade>();
 
-        public string IsActive { get; set; } = string.Empty;
+        public string isActive { get; set; } = string.Empty;
 
 
+    }
+
+    public class Grade
+    {
+        public string GradeID { get; set; }
     }
 
     public class SchoolAsOneString
