@@ -8,20 +8,16 @@ namespace School.Api.School.Data
 {
     public interface ISchoolRepository
     {
-
-        //void Add(ClsRoom item);
-        // IEnumerable<EventProgramRelations> GetAll();
-       // IEnumerable<ClsRoom> SearchSchoolDistrict(SearchSchoolDistrictRequest ID);
-        //void Remove(ClsRoom item);
-       // void Update(ClsRoom item);
-        SchoolDto GetSchoolByState(SearchSchoolDistrictDto state);
+        SchoolAsOneStringList GetSchoolsByState(SearchDto state);
         SchoolDistrictListDto GetSchoolDistrictByState(SearchSchoolDistrictDto state);
         GradeDtoList GetGrades();
         GradeDtoList GetSchoolGrades(string schoolId);
-        ClasssDtoList GetClassesBySchool(string schoolId);
-        ClasssDtoList GetClassesByGrade(string schoolGradeId);
+        ClassDtoList GetClassesBySchool(string schoolId);
+        ClassDtoList GetClassesByGrade(string schoolGradeId);
         StateListDto GetStates();
         SchoolDto GetSchool(string schoolId);
         TeacherListDto GetTeachersInSchool(string schoolId);
+        string SaveClass(ClassDtoList school, string schoolId, string gradeId);
+        string SaveSchool(SchoolDto dto);
     }
 }

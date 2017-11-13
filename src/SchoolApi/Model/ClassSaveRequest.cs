@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace School.Api.School.Model
+﻿namespace School.Api.School.Model
 {
     public class ClassSaveRequest
     {
-        //public string GradeId{ get; set; } = string.Empty;
-        public List<ClassDto> Classes = new List<ClassDto>();
+        public ClassDtoList Classes = new ClassDtoList();
     }
 }

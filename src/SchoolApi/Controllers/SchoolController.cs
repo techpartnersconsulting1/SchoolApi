@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using School.Api.School.Data;
 using School.Api.School.Model;
 
@@ -27,29 +28,23 @@ namespace School.Api.School.Controllers
         [Route("SearchSchool")]
         public IActionResult SearchSchools([FromBody]SearchSchoolRequest dto)
         {
-
             ObjectResult result = null;
             try
             {
                 Response<SchoolAsOneStringList> resp = new Response<SchoolAsOneStringList>();
-                SchoolAsOneStringList list = new SchoolAsOneStringList();
-                list.Schools.Add(new SchoolAsOneString { ID = "201",DataString =  "Brunswick Acres Elementary,12 Kory Lane, Kendall Park,NJ,08824" });
-                list.Schools.Add(new SchoolAsOneString { ID = "202", DataString = "Cambridge elementary School,234 Stouts Lane, Kendall Park,NJ,08824" });
+                var list = Repository.GetSchoolsByState(dto.Request);
                 resp.Message = "Data retrieved.";
                 resp.SetDto(list);
                 result = new OkObjectResult(resp);
             }
             catch (Exception ex)
             {
+                ExceptionDetails errDt = new ExceptionDetails {Message = ex.StackTrace};
                 ErrorResponse errResp = new ErrorResponse();
-                ExceptionDetails errDt = new ExceptionDetails();
-                errDt.Message = ex.StackTrace;
                 errResp.SetException(errDt);
                 result = StatusCode(500, errResp);
-
             }
             return result;
-
         }
     
 
@@ -126,15 +121,16 @@ namespace School.Api.School.Controllers
                 SchoolDto sch = new Model.SchoolDto();
                 sch.address = req.School.address;
                 sch.city = req.School.city;
-                sch.id = "2501";
                 sch.isActive = req.School.isActive;
                 sch.name = req.School.name;
                 sch.schoolDistrictId = req.School.schoolDistrictId;
                 sch.state = req.School.state;
                 sch.gradeIds = req.School.gradeIds;
-
-                resp.SetDto(sch);
-                resp.Message = "Data retrieved.";
+                var jsonResp = Repository.SaveSchool(sch);
+                var jobj = JObject.Parse(jsonResp);
+                var newSch = jobj.ToObject<SchoolDto>();
+                resp.SetDto(newSch);
+                resp.Message = "School Saved.";
                 result = new OkObjectResult(resp);
             }
             catch (Exception ex)
@@ -217,7 +213,7 @@ namespace School.Api.School.Controllers
             ObjectResult result = null;
             try
             {
-                Response<ClasssDtoList> resp = new Response<ClasssDtoList>();
+                Response<ClassDtoList> resp = new Response<ClassDtoList>();
                 // TODO: IMPORTANT!!! How to convert "schoolId" + "gradeId" into @SchoolGradeID
                 var list = Repository.GetClassesByGrade(gradeId);
                 resp.SetDto(list);
@@ -248,7 +244,7 @@ namespace School.Api.School.Controllers
             ObjectResult result = null;
             try
             {
-                Response<ClasssDtoList> resp = new Response<ClasssDtoList>();
+                Response<ClassDtoList> resp = new Response<ClassDtoList>();
                 var list = Repository.GetClassesBySchool(schoolId);
                 resp.SetDto(list);
                 resp.Message = "Data retrieved";
@@ -276,25 +272,22 @@ namespace School.Api.School.Controllers
             ObjectResult result = null;
             try
             {
-                Response<ClasssDtoList> resp = new Response<ClasssDtoList>();
-                ClasssDtoList list = new Model.ClasssDtoList();
-                list.Classes.Add(new ClassDto { Id = "10", Name =request.Classes[0].Name ,IsActive =request.Classes[0].IsActive,TeacherId = request.Classes[0].TeacherId });
-               
-                resp.SetDto(list);
-                resp.Message = "Classes saved";
+                Response<ClassDto> resp = new Response<ClassDto>();
+                var jsonResp = Repository.SaveClass(request.Classes, schoolId, gradeId);
+                var jobj = JObject.Parse(jsonResp);
+                var newCls = jobj.ToObject<ClassDto>();
+                resp.SetDto(newCls);
+                resp.Message = "Classes saved.";
                 result = new OkObjectResult(resp);
             }
             catch (Exception ex)
             {
+                ExceptionDetails errDt = new ExceptionDetails {Message = ex.StackTrace};
                 ErrorResponse errResp = new ErrorResponse();
-                ExceptionDetails errDt = new ExceptionDetails();
-                errDt.Message = ex.StackTrace;
                 errResp.SetException(errDt);
                 result = StatusCode(500, errResp);
-
             }
             return result;
-
         }
        
 

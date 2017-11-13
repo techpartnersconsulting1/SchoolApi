@@ -20,8 +20,9 @@ namespace School.Api.School.Data
             OptionsConString = optionsAccessor.Value;
         }
 
-        public SchoolDto GetSchoolByState(SearchSchoolDistrictDto state)
+        public SchoolAsOneStringList GetSchoolsByState(SearchDto dto)
         {
+            var result = new SchoolAsOneStringList();
             string queryString = "[dbo].[sp_AdmSchoolByState]";
             using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
             {
@@ -31,21 +32,16 @@ namespace School.Api.School.Data
                     {
                         connection.Open();
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new SqlParameter { ParameterName = "@State", DbType = DbType.String, Value = state.State });
-                        command.Parameters.Add(new SqlParameter { ParameterName = "@UserID", DbType = DbType.Int32, Value = Convert.ToInt32(state.userId) });
+                        command.Parameters.Add(new SqlParameter { ParameterName = "@State", DbType = DbType.String, Value = dto.State });
+                        command.Parameters.Add(new SqlParameter { ParameterName = "@UserID", DbType = DbType.Int32, Value = Convert.ToInt32(dto.userId) });
                         var dr = command.ExecuteReader();
                         while (dr.Read())
                         {
-                            SchoolDto school = new SchoolDto()
-                            {
-                                id = dr["SchoolId"].ToString(),
-                                name = dr["SchoolName"].ToString(),
-                                city = dr["Address"].ToString(),
-                                address = dr["City"].ToString(),
-                                state = dr["State"].ToString(),
-                                //schoolDistrictId = dr["Zip"].ToString()
-                            };
-                            return school;
+                            var rec = new SchoolAsOneString();
+                            rec.ID = dr["SchoolId"].ToString();
+                            rec.DataString = string.Format("{0},{1},{2},{3},{4}", dr["SchoolName"].ToString(), dr["Address"].ToString(),
+                                dr["City"].ToString(), dr["State"].ToString(), dr["Zip"].ToString());
+                            result.Schools.Add(rec);
                         }
                     }
                     catch (Exception ex)
@@ -54,7 +50,7 @@ namespace School.Api.School.Data
                     }
                 }
             }
-            return null;
+            return result;
         }
 
         public SchoolDistrictListDto GetSchoolDistrictByState(SearchSchoolDistrictDto state)
@@ -150,9 +146,9 @@ namespace School.Api.School.Data
             return result;
         }
 
-        public ClasssDtoList GetClassesBySchool(string schoolId)
+        public ClassDtoList GetClassesBySchool(string schoolId)
         {
-            var result = new ClasssDtoList();
+            var result = new ClassDtoList();
             
             string queryString = "[dbo].[sp_AdmClassbySchool]";
             using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
@@ -167,9 +163,7 @@ namespace School.Api.School.Data
                         var jsonString = command.ExecuteScalar() as string;
                         var jsonArr = JArray.Parse(jsonString);
                         if (jsonArr == null || jsonArr.Count == 0) return null;
-                        var jobj = jsonArr[0]?["dto"]?["classes"];
-                        var obj = jobj?.ToObject<List<ClassDto>>();
-                        result.Classes = obj;
+                        result = jsonArr[0].ToObject<ClassDtoList>();
                     }
                     catch (Exception ex)
                     {
@@ -215,9 +209,9 @@ namespace School.Api.School.Data
             return result;
         }
 
-        public ClasssDtoList GetClassesByGrade(string schoolGradeId)
+        public ClassDtoList GetClassesByGrade(string schoolGradeId)
         {
-            var result = new ClasssDtoList();
+            var result = new ClassDtoList();
 
             string queryString = "[dbo].[sp_AdmClassByGrade]";
             using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
@@ -569,6 +563,77 @@ namespace School.Api.School.Data
                         var jobj = jsonArr[0]["dto"];
                         var obj = jobj?.ToObject<SchoolDto>();
                         return obj;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+
+        public string SaveClass(ClassDtoList dto, string schoolId, string gradeId)
+        {
+            string queryString = "[dbo].[sp_AdmSaveClass]";
+            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    try
+                    {
+                        var jobj = JObject.FromObject(dto);
+                        jobj["schoolId"] = schoolId;
+                        jobj["gradeId"] = gradeId;
+                        var jsonString = jobj.ToString();
+                        connection.Open();
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter { ParameterName = "@ClassData", DbType = DbType.String, Value = jsonString });
+                        var scalar = command.ExecuteScalar();
+                        var output = scalar as string;
+                        if (output == null)
+                        {
+                            throw new Exception("Unknown error");
+                        }
+                        if (!output.Contains("{"))
+                        {
+                            // consider it as error message
+                            throw new Exception(output);
+                        }
+                        return output;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+
+        public string SaveSchool(SchoolDto dto)
+        {
+            string queryString = "[dbo].[sp_AdmSaveSchool]";
+            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    try
+                    {
+                        var jsonString = JObject.FromObject(dto).ToString();
+                        connection.Open();
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter { ParameterName = "@SchoolData", DbType = DbType.String, Value = jsonString });
+                        var scalar = command.ExecuteScalar();
+                        var output = scalar as string;
+                        if (output == null)
+                        {
+                            throw new Exception("Unknown error");
+                        }
+                        if (!output.Contains("{"))
+                        {
+                            // consider it as error message
+                            throw new Exception(output);
+                        }
+                        return output;
                     }
                     catch (Exception ex)
                     {
