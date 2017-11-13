@@ -13,11 +13,12 @@ namespace School.Api.School.Data
         GradeDtoList GetGrades();
         GradeDtoList GetSchoolGrades(string schoolId);
         ClassDtoList GetClassesBySchool(string schoolId);
-        ClassDtoList GetClassesByGrade(string schoolGradeId);
+        ClassDtoList GetClassesByGrade(string gradeSchoolId);
         StateListDto GetStates();
         SchoolDto GetSchool(string schoolId);
         TeacherListDto GetTeachersInSchool(string schoolId);
         string SaveClass(ClassDtoList school, string schoolId, string gradeId);
         string SaveSchool(SchoolDto dto);
+        string SaveTeacherToSchool(TeacherDto dto, string schoolId);
     }
 }

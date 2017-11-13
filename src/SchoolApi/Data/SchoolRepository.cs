@@ -191,11 +191,22 @@ namespace School.Api.School.Data
                         var dr = command.ExecuteReader();
                         while (dr.Read())
                         {
-                            // TODO: CONFIRM  IT
+                            // according to SP sources we forced to use this "hack"
+                            var errMsg = "";
+                            try
+                            {
+                                errMsg = (dr["ErrorMessage"] ?? "").ToString();
+                            }
+                            catch
+                            {
+                                // supressing
+                            }
+                            if (!string.IsNullOrWhiteSpace(errMsg)) return null;
+
                             var newTeacher = new TeacherDto();
                             newTeacher.Id = dr["UserID"].ToString();
                             newTeacher.Name = dr["FirstName"].ToString();
-                            newTeacher.Name = dr["LastName"].ToString();
+                            newTeacher.Name += " " + dr["LastName"].ToString();
                             //newTeacher.Active = dr["Active"].ToString();
                             result.Teachers.Add(newTeacher);
                         }
@@ -209,7 +220,44 @@ namespace School.Api.School.Data
             return result;
         }
 
-        public ClassDtoList GetClassesByGrade(string schoolGradeId)
+        public string SaveTeacherToSchool(TeacherDto dto, string schoolId)
+        {
+            // TODO: Check SP name
+            string queryString = "[dbo].[sp_AdmSaveTeacher]";
+            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    try
+                    {
+                        var jobj = JObject.FromObject(dto);
+                        jobj["schoolId"] = schoolId;
+                        var jsonString = jobj.ToString();
+                        connection.Open();
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter { ParameterName = "@TeacherData", DbType = DbType.String, Value = jsonString });
+                        var scalar = command.ExecuteScalar();
+                        var output = scalar as string;
+                        if (output == null)
+                        {
+                            throw new Exception("Unknown error");
+                        }
+                        if (!output.Contains("{"))
+                        {
+                            // consider it as error message
+                            throw new Exception(output);
+                        }
+                        return output;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+
+        public ClassDtoList GetClassesByGrade(string gradeSchoolId)
         {
             var result = new ClassDtoList();
 
@@ -222,7 +270,7 @@ namespace School.Api.School.Data
                     {
                         connection.Open();
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new SqlParameter { ParameterName = "@GradeSchoolID", DbType = DbType.Int32, Value = Convert.ToInt32(schoolGradeId) });
+                        command.Parameters.Add(new SqlParameter { ParameterName = "@GradeSchoolID", DbType = DbType.Int32, Value = Convert.ToInt32(gradeSchoolId) });
                         var jsonString = command.ExecuteScalar() as string;
                         var jsonArr = JArray.Parse(jsonString);
                         if (jsonArr == null || jsonArr.Count == 0) return null;

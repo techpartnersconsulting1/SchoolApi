@@ -318,34 +318,29 @@ namespace School.Api.School.Controllers
 
         }
        
-        // GET api/values
         [HttpPost]
         [Route("{schoolId}/Teacher")]
         public IActionResult SaveTeacherToSchool([FromBody] SaveTeacherRequest req, string schoolId)
         {
-
             ObjectResult result = null;
             try
             {
                 Response<TeacherDto> resp = new Response<TeacherDto>();
-                TeacherDto dto = new Model.TeacherDto();
-                dto.Id = "12345";
-                dto.Name = req.dto.Name;
+                var jsonResp = Repository.SaveTeacherToSchool(req.dto, schoolId);
+                var jobj = JObject.Parse(jsonResp);
+                var newTeacher = jobj.ToObject<TeacherDto>();
+                resp.SetDto(newTeacher);
                 resp.Message = "Data saved.";
-                resp.SetDto(dto);
                 result = new OkObjectResult(resp);
             }
             catch (Exception ex)
             {
+                ExceptionDetails errDt = new ExceptionDetails {Message = ex.StackTrace};
                 ErrorResponse errResp = new ErrorResponse();
-                ExceptionDetails errDt = new ExceptionDetails();
-                errDt.Message = ex.StackTrace;
                 errResp.SetException(errDt);
                 result = StatusCode(500, errResp);
-
             }
             return result;
-
         }
 
 
