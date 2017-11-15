@@ -13,7 +13,7 @@ namespace School.Api.School.Data
         GradeDtoList GetGrades();
         GradeDtoList GetSchoolGrades(string schoolId);
         ClassDtoList GetClassesBySchool(string schoolId);
-        ClassDtoList GetClassesByGrade(string gradeSchoolId);
+        ClassDtoList GetClassesByGrade(string schoolId, string gradeId);
         StateListDto GetStates();
         SchoolDto GetSchool(string schoolId);
         TeacherListDto GetTeachersInSchool(string schoolId);

@@ -214,8 +214,7 @@ namespace School.Api.School.Controllers
             try
             {
                 Response<ClassDtoList> resp = new Response<ClassDtoList>();
-                // TODO: IMPORTANT!!! How to convert "schoolId" + "gradeId" into @SchoolGradeID
-                var list = Repository.GetClassesByGrade(gradeId);
+                var list = Repository.GetClassesByGrade(schoolId, gradeId);
                 resp.SetDto(list);
                 resp.Message = "Data retrieved";
 
