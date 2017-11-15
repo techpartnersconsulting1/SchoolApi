@@ -257,7 +257,7 @@ namespace School.Api.School.Data
             }
         }
 
-        public ClassDtoList GetClassesByGrade(string gradeSchoolId)
+        public ClassDtoList GetClassesByGrade(string schoolId, string gradeId)
         {
             var result = new ClassDtoList();
 
@@ -270,7 +270,8 @@ namespace School.Api.School.Data
                     {
                         connection.Open();
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new SqlParameter { ParameterName = "@GradeSchoolID", DbType = DbType.Int32, Value = Convert.ToInt32(gradeSchoolId) });
+                        command.Parameters.Add(new SqlParameter { ParameterName = "@SchoolID", DbType = DbType.Int32, Value = Convert.ToInt32(schoolId) });
+                        command.Parameters.Add(new SqlParameter { ParameterName = "@GradeID", DbType = DbType.Int32, Value = Convert.ToInt32(gradeId) });
                         var jsonString = command.ExecuteScalar() as string;
                         var jsonArr = JArray.Parse(jsonString);
                         if (jsonArr == null || jsonArr.Count == 0) return null;
