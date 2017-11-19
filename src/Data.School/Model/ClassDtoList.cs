@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace School.Api.School.Model
+namespace Data.School
 {
     public class ClassDtoList
     {

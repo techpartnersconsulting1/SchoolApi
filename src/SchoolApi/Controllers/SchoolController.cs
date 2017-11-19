@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Data.School;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using School.Api.School.Data;
 using School.Api.School.Model;
+using School.Api.School.Services;
 
 namespace School.Api.School.Controllers
 {
@@ -17,6 +18,11 @@ namespace School.Api.School.Controllers
         private ISchoolRepository Repository
         {
             get;
+        }
+
+        public SchoolsController(IOptions<ConfigOptions> options)
+        {
+            Repository = new SchoolRepository(options.Value.ConnectionString);
         }
 
         public SchoolsController(ISchoolRepository repository)
@@ -118,15 +124,7 @@ namespace School.Api.School.Controllers
             try
             {
                 Response<SchoolDto> resp = new Response<SchoolDto>();
-                SchoolDto sch = new Model.SchoolDto();
-                sch.address = req.School.address;
-                sch.city = req.School.city;
-                sch.isActive = req.School.isActive;
-                sch.name = req.School.name;
-                sch.schoolDistrictId = req.School.schoolDistrictId;
-                sch.state = req.School.state;
-                sch.gradeIds = req.School.gradeIds;
-                var jsonResp = Repository.SaveSchool(sch);
+                var jsonResp = Repository.SaveSchool(req.School);
                 var jobj = JObject.Parse(jsonResp);
                 var newSch = jobj.ToObject<SchoolDto>();
                 resp.SetDto(newSch);

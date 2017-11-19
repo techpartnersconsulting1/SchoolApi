@@ -1,4 +1,4 @@
-﻿namespace School.Api.School.Model
+﻿namespace Data.School
 {
     public class StateDto
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace School.Api.School.Model
-{
+namespace Data.School { 
+
     public class SchoolDistrictListDto
     {
         public List<SchoolDistrictDto> SchoolDistricts = new List<SchoolDistrictDto>();

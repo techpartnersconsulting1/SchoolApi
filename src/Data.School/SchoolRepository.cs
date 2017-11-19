@@ -4,27 +4,24 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using School.Api.School.Model;
-using School.Api.School.Services;
 
-namespace School.Api.School.Data
+namespace Data.School
 {
     public class SchoolRepository: ISchoolRepository
     {
-        private ConfigOptions OptionsConString { get; }
+        private string OptionsConString { get; }
 
-        public SchoolRepository(IOptions<ConfigOptions> optionsAccessor)
+        public SchoolRepository(string connectionString)
         {
-            OptionsConString = optionsAccessor.Value;
+            OptionsConString = connectionString;
         }
 
         public SchoolAsOneStringList GetSchoolsByState(SearchDto dto)
         {
             var result = new SchoolAsOneStringList();
             string queryString = "[dbo].[sp_AdmSchoolByState]";
-            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(OptionsConString))
             {
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
@@ -57,7 +54,7 @@ namespace School.Api.School.Data
         {
             var result = new SchoolDistrictListDto();
             string queryString = "[dbo].[sp_AdmSchoolDistrictByState]";
-            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(OptionsConString))
             {
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
@@ -87,7 +84,7 @@ namespace School.Api.School.Data
         {
             var result = new GradeDtoList();
             string queryString = "[dbo].[sp_AdmMasterGrade]";
-            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(OptionsConString))
             {
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
@@ -118,7 +115,7 @@ namespace School.Api.School.Data
         {
             var result = new GradeDtoList();
             string queryString = "[dbo].[sp_AdmGrade]";
-            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(OptionsConString))
             {
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
@@ -151,7 +148,7 @@ namespace School.Api.School.Data
             var result = new ClassDtoList();
             
             string queryString = "[dbo].[sp_AdmClassbySchool]";
-            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(OptionsConString))
             {
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
@@ -179,7 +176,7 @@ namespace School.Api.School.Data
             var result = new TeacherListDto();
 
             string queryString = "[dbo].[sp_AdmTeacherbySchool]";
-            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(OptionsConString))
             {
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
@@ -224,7 +221,7 @@ namespace School.Api.School.Data
         {
             // TODO: Check SP name
             string queryString = "[dbo].[sp_AdmSaveTeacher]";
-            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(OptionsConString))
             {
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
@@ -262,7 +259,7 @@ namespace School.Api.School.Data
             var result = new ClassDtoList();
 
             string queryString = "[dbo].[sp_AdmClassByGrade]";
-            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(OptionsConString))
             {
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
@@ -597,7 +594,7 @@ namespace School.Api.School.Data
         public SchoolDto GetSchool(string schoolId)
         {
             string queryString = "[dbo].[sp_AdmSchoolDetails]";
-            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(OptionsConString))
             {
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
@@ -624,7 +621,7 @@ namespace School.Api.School.Data
         public string SaveClass(ClassDtoList dto, string schoolId, string gradeId)
         {
             string queryString = "[dbo].[sp_AdmSaveClass]";
-            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(OptionsConString))
             {
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
@@ -661,7 +658,7 @@ namespace School.Api.School.Data
         public string SaveSchool(SchoolDto dto)
         {
             string queryString = "[dbo].[sp_AdmSaveSchool]";
-            using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(OptionsConString))
             {
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {

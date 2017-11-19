@@ -4,12 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.XPath;
+using Data.School;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using School.Api.School.Services;
 using Swashbuckle.Swagger.Model;
 using Swashbuckle.SwaggerGen.Annotations;
 
@@ -33,10 +35,13 @@ namespace EventApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ConfigOptions>(Configuration.GetSection("DbSettings"));
+
             // Add framework services.
             services.AddMvc()
                 .AddJsonOptions(
                     opts => { opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver(); });
+            services.AddSingleton<ISchoolRepository, SchoolRepository>();
 
             services.AddSwaggerGen();
 

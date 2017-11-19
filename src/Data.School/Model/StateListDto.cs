@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace School.Api.School.Model
+namespace Data.School
 {
     public class StateListDto
     {

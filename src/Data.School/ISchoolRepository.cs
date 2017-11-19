@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using School.Api.School.Model;
 
-namespace School.Api.School.Data
+namespace Data.School
 {
     public interface ISchoolRepository
     {

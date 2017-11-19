@@ -1,4 +1,6 @@
-﻿namespace School.Api.School.Model
+﻿using Data.School;
+
+namespace School.Api.School.Model
 {
     public class SaveTeacherRequest
     {
