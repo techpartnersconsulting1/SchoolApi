@@ -25,11 +25,6 @@ namespace School.Api.School.Controllers
             Repository = new SchoolRepository(options.Value.ConnectionString);
         }
 
-        public SchoolsController(ISchoolRepository repository)
-        {
-            this.Repository = repository;
-        }
-
         [HttpPost]
         [Route("SearchSchool")]
         public IActionResult SearchSchools([FromBody]SearchSchoolRequest dto)
