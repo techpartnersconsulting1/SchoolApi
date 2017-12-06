@@ -17,7 +17,7 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Swashbuckle.SwaggerGen": "6.0.0-beta901",
     "Swashbuckle.SwaggerUi": "6.0.0-beta901",
-    "System.Data.SqlClient": "4.3.0",
+    "System.Data.SqlClient": "4.4.0",
     "Data.School": "1.0.0-*"
   },
 
