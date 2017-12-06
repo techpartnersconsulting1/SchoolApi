@@ -83,7 +83,7 @@ namespace Data.School
         public GradeDtoList GetGrades()
         {
             var result = new GradeDtoList();
-            string queryString = "[dbo].[sp_AdmMasterGrade]";
+            string queryString = "[dbo].[sp_AdmGradeMaster]";
             using (SqlConnection connection = new SqlConnection(OptionsConString))
             {
                 using (SqlCommand command = new SqlCommand(queryString, connection))
