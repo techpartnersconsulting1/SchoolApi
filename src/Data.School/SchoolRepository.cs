@@ -41,7 +41,7 @@ namespace Data.School
                             result.Schools.Add(rec);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
@@ -71,7 +71,7 @@ namespace Data.School
                             result.SchoolDistricts.Add(districtDto);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
@@ -102,7 +102,7 @@ namespace Data.School
                             result.Grades.Add(newGrade);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
@@ -134,7 +134,7 @@ namespace Data.School
                             result.Grades.Add(newGrade);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
@@ -162,7 +162,7 @@ namespace Data.School
                         if (jsonArr == null || jsonArr.Count == 0) return null;
                         result = jsonArr[0].ToObject<ClassDtoList>();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
@@ -208,7 +208,7 @@ namespace Data.School
                             result.Teachers.Add(newTeacher);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
@@ -246,7 +246,7 @@ namespace Data.School
                         }
                         return output;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
@@ -276,7 +276,7 @@ namespace Data.School
                         var obj = jobj?.ToObject<List<ClassDto>>();
                         result.Classes = obj;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
@@ -610,7 +610,7 @@ namespace Data.School
                         var obj = jobj?.ToObject<SchoolDto>();
                         return obj;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
@@ -647,7 +647,7 @@ namespace Data.School
                         }
                         return output;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
@@ -681,7 +681,7 @@ namespace Data.School
                         }
                         return output;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
