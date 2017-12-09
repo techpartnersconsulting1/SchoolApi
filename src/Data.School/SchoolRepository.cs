@@ -607,8 +607,8 @@ namespace Data.School
                         var jsonArr = JArray.Parse(jsonString);
                         if (jsonArr == null || jsonArr.Count == 0) return null;
                         var jobj = jsonArr[0]["dto"];
-                        var obj = jobj?.ToObject<SchoolDto>();
-                        return obj;
+                        var obj = jobj?.ToObject<List<SchoolDto>>();
+                        return obj.FirstOrDefault();
                     }
                     catch (Exception)
                     {
