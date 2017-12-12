@@ -50,7 +50,7 @@ namespace Data.School
             return result;
         }
 
-        public SchoolDistrictListDto GetSchoolDistrictByState(SearchSchoolDistrictDto state)
+        public SchoolDistrictListDto GetSchoolDistrictByState(SearchSchoolDistrictDto dto)
         {
             var result = new SchoolDistrictListDto();
             string queryString = "[dbo].[sp_AdmSchoolDistrictByState]";
@@ -62,6 +62,8 @@ namespace Data.School
                     {
                         connection.Open();
                         command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter { ParameterName = "@State", DbType = DbType.String, Value = dto.State });
+                        command.Parameters.Add(new SqlParameter { ParameterName = "@UserID", DbType = DbType.Int32, Value = Convert.ToInt32(dto.userId) });
                         var dr = command.ExecuteReader();
                         while (dr.Read())
                         {
