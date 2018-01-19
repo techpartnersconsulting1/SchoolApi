@@ -8,7 +8,7 @@ namespace Data.School
     public interface ISchoolRepository
     {
         SchoolAsOneStringList GetSchoolsByState(SearchDto state);
-        SchoolDistrictListDto GetSchoolDistrictByState(SearchSchoolDistrictDto state);
+        SchoolDistrictAsOneStringList GetSchoolDistrictByState(SearchSchoolDistrictDto state);
         GradeDtoList GetGrades();
         GradeDtoList GetSchoolGrades(string schoolId);
         ClassDtoList GetClassesBySchool(string schoolId);

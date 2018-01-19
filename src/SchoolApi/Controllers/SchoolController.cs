@@ -57,7 +57,7 @@ namespace School.Api.School.Controllers
             ObjectResult result = null;
             try
             {
-                Response<SchoolDistrictListDto> resp = new Response<SchoolDistrictListDto>();
+                Response<SchoolDistrictAsOneStringList> resp = new Response<SchoolDistrictAsOneStringList>();
                 var list = Repository.GetSchoolDistrictByState(dto.Request);
                 resp.SetDto(list);
                 resp.Message = "Data retrieved.";

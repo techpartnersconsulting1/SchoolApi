@@ -18,7 +18,7 @@ namespace Data.School
 
         public string schoolDistrictId { get; set; } = string.Empty;
 
-        public List<Grade> gradeIds = new  List<Grade>();
+        public List<string> gradeIds = new  List<string>();
 
         public string isActive { get; set; } = string.Empty;
 

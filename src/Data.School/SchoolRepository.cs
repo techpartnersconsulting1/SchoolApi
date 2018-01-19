@@ -27,6 +27,8 @@ namespace Data.School
                 {
                     try
                     {
+                        if (string.IsNullOrWhiteSpace(dto.userId)) dto.userId = "0";
+                        if (string.IsNullOrWhiteSpace(dto.State)) dto.State = "";
                         connection.Open();
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.Add(new SqlParameter { ParameterName = "@State", DbType = DbType.String, Value = dto.State });
@@ -50,9 +52,9 @@ namespace Data.School
             return result;
         }
 
-        public SchoolDistrictListDto GetSchoolDistrictByState(SearchSchoolDistrictDto dto)
+        public SchoolDistrictAsOneStringList GetSchoolDistrictByState(SearchSchoolDistrictDto dto)
         {
-            var result = new SchoolDistrictListDto();
+            var result = new SchoolDistrictAsOneStringList();
             string queryString = "[dbo].[sp_AdmSchoolDistrictByState]";
             using (SqlConnection connection = new SqlConnection(OptionsConString))
             {
@@ -60,6 +62,10 @@ namespace Data.School
                 {
                     try
                     {
+                       
+                         if (string.IsNullOrWhiteSpace(dto.userId)) dto.userId = "0";
+                         if (string.IsNullOrWhiteSpace(dto.State)) dto.State = "";
+
                         connection.Open();
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.Add(new SqlParameter { ParameterName = "@State", DbType = DbType.String, Value = dto.State });
@@ -67,10 +73,13 @@ namespace Data.School
                         var dr = command.ExecuteReader();
                         while (dr.Read())
                         {
-                            var districtDto = new SchoolDistrictDto();
-                            districtDto.SchoolDistrictId = dr["SchoolDistrictID"].ToString();
-                            districtDto.SchoolDistrictName = dr["SchoolDistrictName"].ToString();
-                            result.SchoolDistricts.Add(districtDto);
+                            var rec = new SchoolDistrictAsOneString();
+                           // districtDto.SchoolDistrictId = dr["SchoolDistrictID"].ToString();
+                           // districtDto.SchoolDistrictName = dr["SchoolDistrictName"].ToString();
+                            rec.ID = dr["SchoolDistrictID"].ToString();
+                            rec.DataString = string.Format("{0},{1},{2},{3},{4}", dr["SchoolDistrictID"].ToString(), dr["SchoolDistrictName"].ToString(),
+                                dr["State"].ToString(), dr["County"].ToString(), dr["Township"].ToString());
+                            result.SchoolDistricts.Add(rec);
                         }
                     }
                     catch (Exception)
