@@ -265,7 +265,7 @@ namespace School.Api.School.Controllers
             try
             {
                 Response<ClassDto> resp = new Response<ClassDto>();
-                var jsonResp = Repository.SaveClass(request.Classes, schoolId, gradeId);
+                var jsonResp = Repository.SaveClass(request.ClassDto, schoolId, gradeId);
                 var jobj = JObject.Parse(jsonResp);
                 var newCls = jobj.ToObject<ClassDto>();
                 resp.SetDto(newCls);

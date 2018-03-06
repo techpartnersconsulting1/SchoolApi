@@ -4,6 +4,6 @@ namespace School.Api.School.Model
 {
     public class ClassSaveRequest
     {
-        public ClassDtoList Classes = new ClassDtoList();
+        public ClassDtoList ClassDto = new ClassDtoList();
     }
 }

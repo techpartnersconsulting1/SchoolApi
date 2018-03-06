@@ -312,11 +312,7 @@ namespace Data.School
                         StateName = "Alaska",
                         StateCd = "AK"
                     },
-                    new StateDto()
-                    {
-                        StateName = "American Samoa",
-                        StateCd = "AS"
-                    },
+                    
                     new StateDto()
                     {
                         StateName = "Arizona",
@@ -352,11 +348,7 @@ namespace Data.School
                         StateName = "District Of Columbia",
                         StateCd = "DC"
                     },
-                    new StateDto()
-                    {
-                        StateName = "Federated States Of Micronesia",
-                        StateCd = "FM"
-                    },
+                   
                     new StateDto()
                     {
                         StateName = "Florida",
@@ -417,11 +409,7 @@ namespace Data.School
                         StateName = "Maine",
                         StateCd = "ME"
                     },
-                    new StateDto()
-                    {
-                        StateName = "Marshall Islands",
-                        StateCd = "MH"
-                    },
+                   
                     new StateDto()
                     {
                         StateName = "Maryland",
@@ -497,11 +485,7 @@ namespace Data.School
                         StateName = "North Dakota",
                         StateCd = "ND"
                     },
-                    new StateDto()
-                    {
-                        StateName = "Northern Mariana Islands",
-                        StateCd = "MP"
-                    },
+                   
                     new StateDto()
                     {
                         StateName = "Ohio",
@@ -517,21 +501,13 @@ namespace Data.School
                         StateName = "Oregon",
                         StateCd = "OR"
                     },
-                    new StateDto()
-                    {
-                        StateName = "Palau",
-                        StateCd = "PW"
-                    },
+                   
                     new StateDto()
                     {
                         StateName = "Pennsylvania",
                         StateCd = "PA"
                     },
-                    new StateDto()
-                    {
-                        StateName = "Puerto Rico",
-                        StateCd = "PR"
-                    },
+                   
                     new StateDto()
                     {
                         StateName = "Rhode Island",
@@ -567,11 +543,7 @@ namespace Data.School
                         StateName = "Vermont",
                         StateCd = "VT"
                     },
-                    new StateDto()
-                    {
-                        StateName = "Virgin Islands",
-                        StateCd = "VI"
-                    },
+                   
                     new StateDto()
                     {
                         StateName = "Virginia",
